@@ -65,7 +65,7 @@ export interface UnitDescriptor {
   readonly stat_sec:        UnitDescriptor['stat_pri'];
   readonly stat_sec_attr:   UnitDescriptor['stat_pri_attr'];
   readonly stat_pri_armour: [number, number, number, string];
-  // stat_sec_armour  0, 0, flesh
+  readonly stat_sec_armour: [number, number, string];
   // stat_heat        2
   // stat_ground      2, -2, 3, 2
   // stat_mental      10, low, untrained
@@ -95,6 +95,7 @@ const sortedKeys = <const>[
   "stat_sec",
   "stat_sec_attr",
   "stat_pri_armour",
+  "stat_sec_armour",
   "is_female",
 ];
 

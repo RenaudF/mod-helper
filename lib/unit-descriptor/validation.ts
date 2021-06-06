@@ -48,6 +48,7 @@ const checklist: CheckItem[] = [
     },
   { key: "stat_sec_attr", required: ["string"], rest: "string" },
   { key: "stat_pri_armour", required: ["number", "number", "number", "string"] },
+  { key: "stat_sec_armour", required: ["number", "number", "string"] },
   { key: "is_female", required: [], optional: ["boolean"] },
 ];
 

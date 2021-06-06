@@ -48,22 +48,22 @@ export namespace UnitDescriptor {
 // prettier-ignore
 export interface UnitDescriptor {
   /** [ID used in `descr_strat`, `descr_mercenaries` and `export_descr_buildings`] */
-  readonly type: [string];
+  readonly type:            [string];
   /** [ID used in `export_units` and `export_descr_unit_enums`, in-game display name] */
-  readonly dictionary: [string, string];
-  readonly category: [UnitDescriptor.Category];
-  readonly class: [UnitDescriptor.Class];
-  readonly voice_type: [UnitDescriptor.VoiceType];
-  readonly voice_indexes?: ["0 1 2" | undefined];
+  readonly dictionary:      [string, string];
+  readonly category:        [UnitDescriptor.Category];
+  readonly class:           [UnitDescriptor.Class];
+  readonly voice_type:      [UnitDescriptor.VoiceType];
+  readonly voice_indexes?:  [string];
   /** [ID from `descr_models_battle`, unit size, extras (dogs, chariots, etc), mass (1.0 standard - infantry only)] */
-  readonly soldier: [string, number, number, number];
-  readonly attributes: UnitDescriptor.Attributes[];
-  readonly formation: [number, number, number, number, number, string, string | undefined];
-  readonly stat_health: [number, number];
-  readonly stat_pri: [number, number, string, number, number, string, string, string, string, number, number];
-  readonly stat_pri_attr: [string, ...string[]];
-  readonly stat_sec: UnitDescriptor['stat_pri'];
-  readonly stat_sec_attr: UnitDescriptor['stat_pri_attr'];
+  readonly soldier:         [string, number, number, number];
+  readonly attributes:      UnitDescriptor.Attributes[];
+  readonly formation:       [number, number, number, number, number, string, string | undefined];
+  readonly stat_health:     [number, number];
+  readonly stat_pri:        [number, number, string, number, number, string, string, string, string, number, number];
+  readonly stat_pri_attr:   [string, ...string[]];
+  readonly stat_sec:        UnitDescriptor['stat_pri'];
+  readonly stat_sec_attr:   UnitDescriptor['stat_pri_attr'];
   readonly stat_pri_armour: [number, number, number, string];
   // stat_sec_armour  0, 0, flesh
   // stat_heat        2

@@ -72,7 +72,7 @@ export interface UnitDescriptor {
   readonly stat_charge_dist:[number];
   readonly stat_fire_delay: [number];
   readonly stat_food:       [number, number];
-  // stat_cost        1, 320, 130, 40, 50, 320
+  readonly stat_cost:       [number, number, number, number, number, number];
   // ownership        germans
   // ethnicity germans, Germania_Superior
   readonly is_female: [] | [true];
@@ -102,6 +102,7 @@ const sortedKeys = <const>[
   "stat_charge_dist",
   "stat_fire_delay",
   "stat_food",
+  "stat_cost",
   "is_female",
 ];
 

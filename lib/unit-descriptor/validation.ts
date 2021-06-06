@@ -53,6 +53,7 @@ const checklist: CheckItem[] = [
   { key: "stat_ground", required: ["number", "number", "number", "number"] },
   { key: "stat_mental", required: ["number", "string", "string"] },
   { key: "stat_charge_dist", required: ["number"] },
+  { key: "stat_fire_delay", required: ["number"] },
   { key: "is_female", required: [], optional: ["boolean"] },
 ];
 

@@ -70,7 +70,7 @@ export interface UnitDescriptor {
   readonly stat_ground:     [number, number, number, number];
   readonly stat_mental:     [number, string, string];
   readonly stat_charge_dist:[number];
-  // stat_fire_delay  0
+  readonly stat_fire_delay: [number];
   // stat_food        60, 300
   // stat_cost        1, 320, 130, 40, 50, 320
   // ownership        germans
@@ -100,6 +100,7 @@ const sortedKeys = <const>[
   "stat_ground",
   "stat_mental",
   "stat_charge_dist",
+  "stat_fire_delay",
   "is_female",
 ];
 

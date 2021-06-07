@@ -1,4 +1,5 @@
-import { UnitDescriptor } from "./model";
+import { is2DArray, isEmpty } from "lib/utils";
+import { EDUSanitisedData, UnitDescriptor } from "./model";
 
 // Public API
 
@@ -9,7 +10,7 @@ import { UnitDescriptor } from "./model";
  * @todo stop using try / catch for passing diagnostic data
  */
 export const checkUnitDescriptor = (
-  input: Record<string, readonly (string | number | true)[]> | UnitDescriptor
+  input: Record<string, EDUSanitisedData> | UnitDescriptor
 ): input is UnitDescriptor => {
   checklist.forEach(checkEntry(input));
   return true;
@@ -26,9 +27,9 @@ const checklist: CheckItem[] = [
   { key: "category", required: ["string"] },
   { key: "class", required: ["string"] },
   { key: "voice_type", required: ["string"] },
-  { key: "voice_indexes", required: [], optional: ["string"] },
+  { key: "voice_indexes", isOptional: true, required: ["string"] },
   { key: "soldier", required: ["string", "number", "number", "number"] },
-  { key: "attributes", required: [], rest: "string" },
+  { key: "attributes", required: ["string"], rest: "string" },
   {
     key: "formation",
     required: ["number", "number", "number", "number", "number", "string"],
@@ -57,31 +58,43 @@ const checklist: CheckItem[] = [
   { key: "stat_food", required: ["number", "number"] },
   { key: "stat_cost", required: ["number", "number", "number", "number", "number", "number"] },
   { key: "ownership", required: ["string"], rest: "string" },
-  { key: "is_female", required: [], optional: ["boolean"] },
+  {
+    key: "ethnicity",
+    isOptional: true,
+    required: ["string"],
+    optional: ["string", "string", "string", "string"],
+  },
+  { key: "is_female", isFlag: true },
 ];
 
-/** Used to verify known assumptions about a key against a given set of values.
- * `required`, `optional` and `rest` work in a similar way as function arguments. */
-type CheckItem = {
+type BaseCheckItem = {
   /** The key used to look up the values to check within the `UnitDescriptor` model. */
   key: keyof UnitDescriptor;
+};
+/** Only used to check flags (see `is_female`) */
+type BooleanCheck = BaseCheckItem & {
+  /** Only used to check flags (see `is_female`) */
+  isFlag: true;
+};
+/** `required`, `optional` and `rest` work in a similar way as function arguments. */
+type ArrayCheck = BaseCheckItem & {
+  /** Whether or not a key must have a value */
+  isOptional?: true;
+  /** `required` data items must be in sufficient number and match the given types in the given order. */
+  required?: ("string" | "number")[];
+  /** `optional` data items must validate the given `optional` types, but not all given types need to be met. */
+  optional?: ("string" | "number")[];
   /** `rest` data items follow `optional` data items and if present, should all match the given type.
    * The presence of `rest` data items implies that all `optional` data items are present. */
   rest?: "string" | "number";
-} & (
-  | {
-      /** `required` data items must be in sufficient number and match the given types in the given order. */
-      required: ("string" | "number")[];
-      /** `optional` data items must validate the given `optional` types, but not all given types need to be met. */
-      optional?: ("string" | "number")[];
-    }
-  | {
-      /** No `required` data items are needed for boolean flags, as absence of value is treated as a `false`. */
-      required: [];
-      /** `boolean` are only used for flags and therefore can only be unique and cannot mix with other types. */
-      optional?: ["boolean"];
-    }
-);
+};
+/** Used to verify known assumptions about a key against a given set of values. */
+type CheckItem = BooleanCheck | ArrayCheck;
+
+/** Type guard use to differentiate between checks */
+const isBooleanCheck = (checkItem: CheckItem): checkItem is BooleanCheck => {
+  return (<Object>checkItem).hasOwnProperty("isFlag");
+};
 
 /** Overloaded curry for validating a subset of `CheckItem` assumptions. Yummy.
  * @throws an object with expected type and actual value
@@ -99,18 +112,35 @@ const checkAgainst =
  * @throws an object with error details for missing data or failed assumption
  * @todo stop using try / catch for passing diagnostic data */
 const checkEntry =
-  (input: Record<string, readonly (string | number | true)[]> | UnitDescriptor) =>
-  ({ key, required, optional = [], rest }: CheckItem) => {
-    const values = input[key] || [];
+  (input: Record<string, EDUSanitisedData> | UnitDescriptor) => (check: CheckItem) => {
+    const { key } = check;
 
-    const requiredValues = values.slice(0, required.length);
-    if (requiredValues.length < required.length)
-      throw { message: "Missing required value", key, values, required };
-    requiredValues.forEach(checkAgainst(required));
+    if (isBooleanCheck(check))
+      if (input[key] && input[key] !== true) throw { message: "Expected boolean flag", input, key };
+      else return;
 
-    const optionalValues = values.slice(required.length, required.length + optional.length);
-    optionalValues.forEach(checkAgainst(optional));
+    const { isOptional, required = [], optional = [], rest } = check;
 
-    const restValues = values.slice(required.length + optional.length);
-    if (rest) restValues.forEach(checkAgainst(rest));
+    const data = input[key];
+    if (data === true) throw { message: "Expected array of values", input, key };
+
+    const checkFn = (values: (string | number | undefined)[]) => {
+      const requiredValues = values.slice(0, required.length);
+      if (requiredValues.length < required.length)
+        throw { message: "Missing required value", key, data, required };
+      requiredValues.forEach(checkAgainst(required));
+
+      const optionalValues = values.slice(required.length, required.length + optional.length);
+      optionalValues.forEach(checkAgainst(optional));
+
+      const restValues = values.slice(required.length + optional.length);
+      if (rest) restValues.forEach(checkAgainst(rest));
+    };
+
+    if (!data)
+      if (isOptional) return;
+      else throw { message: "Missing required value", key, input };
+    if (isEmpty(data)) throw { message: "Unexpected empty data", key, input };
+    if (is2DArray(data)) data.forEach(checkFn);
+    else checkFn(data);
   };

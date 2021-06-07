@@ -1,3 +1,5 @@
+import { is2DArray } from "lib/utils";
+
 /** Namespace to document union types of known possible values for their eponymous keys.
  * This namespace doubles up as an interface to model all possible known entries from the EDU.
  * @todo finish list of attributes (see commented out input samples)
@@ -46,40 +48,44 @@ export namespace UnitDescriptor {
     | "no_custom";
 }
 // prettier-ignore
-export interface UnitDescriptor {
+export interface UnitDescriptor extends Record<string, EDUSanitisedData> {
   /** [ID used in `descr_strat`, `descr_mercenaries` and `export_descr_buildings`] */
-  readonly type:            [string];
+  type:             [string];
   /** [ID used in `export_units` and `export_descr_unit_enums`, in-game display name] */
-  readonly dictionary:      [string, string];
-  readonly category:        [UnitDescriptor.Category];
-  readonly class:           [UnitDescriptor.Class];
-  readonly voice_type:      [UnitDescriptor.VoiceType];
-  readonly voice_indexes?:  [string];
+  dictionary:       [string, string];
+  category:         [UnitDescriptor.Category];
+  class:            [UnitDescriptor.Class];
+  voice_type:       [UnitDescriptor.VoiceType];
+  voice_indexes?:   [string];
   /** [ID from `descr_models_battle`, unit size, extras (dogs, chariots, etc), mass (1.0 standard - infantry only)] */
-  readonly soldier:         [string, number, number, number];
-  readonly attributes:      UnitDescriptor.Attributes[];
-  readonly formation:       [number, number, number, number, number, string, string | undefined];
-  readonly stat_health:     [number, number];
-  readonly stat_pri:        [number, number, string, number, number, string, string, string, string, number, number];
-  readonly stat_pri_attr:   [string, ...string[]];
-  readonly stat_sec:        UnitDescriptor['stat_pri'];
-  readonly stat_sec_attr:   UnitDescriptor['stat_pri_attr'];
-  readonly stat_pri_armour: [number, number, number, string];
-  readonly stat_sec_armour: [number, number, string];
-  readonly stat_heat:       [number];
-  readonly stat_ground:     [number, number, number, number];
-  readonly stat_mental:     [number, string, string];
-  readonly stat_charge_dist:[number];
-  readonly stat_fire_delay: [number];
-  readonly stat_food:       [number, number];
-  readonly stat_cost:       [number, number, number, number, number, number];
-  readonly ownership:       [string, ...string[]];
-  // ethnicity germans, Germania_Superior
-  readonly is_female: [] | [true];
+  soldier:          [string, number, number, number];
+  attributes:       UnitDescriptor.Attributes[];
+  formation:        [number, number, number, number, number, string, string?];
+  stat_health:      [number, number];
+  stat_pri:         [number, number, string, number, number, string, string, string, string, number, number];
+  stat_pri_attr:    [string, ...string[]];
+  stat_sec:         UnitDescriptor['stat_pri'];
+  stat_sec_attr:    UnitDescriptor['stat_pri_attr'];
+  stat_pri_armour:  [number, number, number, string];
+  stat_sec_armour:  [number, number, string];
+  stat_heat:        [number];
+  stat_ground:      [number, number, number, number];
+  stat_mental:      [number, string, string];
+  stat_charge_dist: [number];
+  stat_fire_delay:  [number];
+  stat_food:        [number, number];
+  stat_cost:        [number, number, number, number, number, number];
+  ownership:        [string, ...string[]];
+  ethnicity?:       ([string, string?] |
+                    [string, string, string?] |
+                    [string, string, string, string?] |
+                    [string, string, string, string, string?])[];
+  is_female?:       true;
 }
+
 /** The (hopefully) exhaustive list of keys from `UnitDescriptor`, in the order they appear in the file.
  * Used for serialisation so if a key is present in the file but missing here, it won't be serialised. */
-const sortedKeys = <const>[
+const sortedKeys = [
   "type",
   "dictionary",
   "category",
@@ -104,21 +110,32 @@ const sortedKeys = <const>[
   "stat_food",
   "stat_cost",
   "ownership",
+  "ethnicity",
   "is_female",
 ];
 
+/** The simplest model, whatever is left from a raw line once the key is removed, split by commas, trimmed. */
+export type EDUBaseData = string[];
+/** The `EDUAggregatedData` is an intermediary model to accomodate for multiple entries with the same key.
+ * When collision happens on a key, the values for each entries are boxed into an outer array. */
+export type EDUAggregatedData = string[] | string[][];
+/** Compared to the previous `EDUAggregatedData` model, sanitisation will coerce numbers and booleans. */
+export type EDUSanitisedData =
+  | undefined
+  | true
+  | (string | number | undefined)[]
+  | (string | number | undefined)[][];
+
 /** For all your serialisation needs. */
+// prettier-ignore
 export const toString = (model: UnitDescriptor) =>
   sortedKeys.reduce((output, key) => {
-    const value = model[key];
-    if (value instanceof Array) {
-      switch (value.length) {
-        case 0: // equivalent to a `false` flag
-          return output;
-        case 1: // equivalent to a `true` flag
-          if (value[0] === true) return `${output}${key}\n`;
-        default:
-          return `${output}${key.padEnd(17)}${value.join(", ")}\n`;
-      }
-    } else return output; // value is undefined - key not present
+    const values = model[key];
+    if (values instanceof Array) {
+      if (is2DArray<string | number | undefined>(values)) {
+        const mapped = values.map((values) => `${key.padEnd(17)}${values.join(", ")}`);
+        return `${output}${mapped.join("\n")}\n`; // key with multiple records (see `ethnicity`)
+      } else return `${output}${key.padEnd(17)}${values.join(", ")}\n`; // generic case
+    } else if (values) return `${output}${key}\n`; // boolean flag - only add the key
+    else return output; // value is undefined - key not present
   }, "");

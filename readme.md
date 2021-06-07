@@ -4,6 +4,10 @@ This library offers an I/O interface for the EDU descritor file, along with a fu
 With this you can easily balance your mod by editing all values from `feral_export_descr_unit.txt` at a brushstroke.
 So far it works for `feral_export_descr_unit.txt` but it could be extended to support more files.
 
+## Important
+
+If you're on Windows, you might want to update the paths in `lib/handy-paths.ts` to match the equivalent locations on your file system.
+
 ## Required
 
 [npm](npmjs.com)

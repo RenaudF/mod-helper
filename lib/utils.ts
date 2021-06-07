@@ -16,3 +16,5 @@ export const isEmpty: {
   <T>(array: T[]): boolean;
   <T>(array: T[] | T[][]): boolean;
 } = ({ length }) => !length;
+
+export const identity = <T>(d: T) => d;

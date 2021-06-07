@@ -83,6 +83,9 @@ export interface UnitDescriptor extends Record<string, EDUSanitisedData> {
                     [string, string, string?] |
                     [string, string, string, string?] |
                     [string, string, string, string, string?])[];
+  tattoo_color?:    [string];
+  unique_tattoo?:   [number];
+  exclude_tattoo?:  [string];
   is_female?:       true;
 }
 
@@ -117,6 +120,9 @@ const sortedKeys = [
   "stat_cost",
   "ownership",
   "ethnicity",
+  "tattoo_color",
+  "unique_tattoo",
+  "exclude_tattoo",
   "is_female",
 ];
 

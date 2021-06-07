@@ -67,6 +67,9 @@ const checklist: CheckItem[] = [
     required: ["string"],
     optional: ["string", "string", "string", "string"],
   },
+  { key: "tattoo_color", isOptional: true, required: ["string"] },
+  { key: "unique_tattoo", isOptional: true, required: ["number"] },
+  { key: "exclude_tattoo", isOptional: true, required: ["string"] },
   { key: "is_female", isFlag: true },
 ];
 

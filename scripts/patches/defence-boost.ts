@@ -1,5 +1,6 @@
 import { UnitDescriptor } from "lib/unit-descriptor";
 
+/** Simply adds 2 armour and 5 defence to everyone */
 export const patch = (models: UnitDescriptor[]) =>
   // prettier-ignore
   models.forEach((model) => {

@@ -61,8 +61,8 @@ export interface UnitDescriptor extends Record<string, EDUSanitisedData> {
   soldier:          [string, number, number, number];
   officer?:         Multi<[string]>;
   animal?:          [string];
-  mount:            [string];
-  mount_effect:     [string, string, string?];
+  mount?:           [string];
+  mount_effect?:    [string, string, string?];
   engine?:          [string];
   ship?:            [string];
   attributes:       UnitDescriptor.Attributes[];

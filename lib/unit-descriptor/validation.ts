@@ -26,7 +26,7 @@ const checklist: CheckItem[] = [
   { key: "dictionary", required: ["string"] },
   { key: "category", required: ["string"] },
   { key: "class", required: ["string"] },
-  { key: "voice_type", required: ["string"] },
+  { key: "voice_type", required: ["string"], optional: ["string"] },
   { key: "voice_indexes", isOptional: true, required: ["string"] },
   { key: "soldier", required: ["string", "number", "number", "number"] },
   { key: "attributes", required: ["string"], rest: "string" },

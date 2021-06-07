@@ -55,7 +55,7 @@ export interface UnitDescriptor extends Record<string, EDUSanitisedData> {
   dictionary:       [string, string];
   category:         [UnitDescriptor.Category];
   class:            [UnitDescriptor.Class];
-  voice_type:       [UnitDescriptor.VoiceType];
+  voice_type:       [UnitDescriptor.VoiceType, string?];
   voice_indexes?:   [string];
   /** [ID from `descr_models_battle`, unit size, extras (dogs, chariots, etc), mass (1.0 standard - infantry only)] */
   soldier:          [string, number, number, number];

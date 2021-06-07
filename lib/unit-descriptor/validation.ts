@@ -31,6 +31,7 @@ const checklist: CheckItem[] = [
   { key: "soldier", required: ["string", "number", "number", "number"] },
   { key: "mount", isOptional: true, required: ["string"] },
   { key: "mount_effect", isOptional: true, required: ["string", "string"], optional: ["string"] },
+  { key: "engine", isOptional: true, required: ["string"] },
   { key: "attributes", required: ["string"], rest: "string" },
   {
     key: "formation",

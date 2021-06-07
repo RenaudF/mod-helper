@@ -61,6 +61,7 @@ export interface UnitDescriptor extends Record<string, EDUSanitisedData> {
   soldier:          [string, number, number, number];
   mount:            [string];
   mount_effect:     [string, string, string?];
+  engine?:          [string];
   attributes:       UnitDescriptor.Attributes[];
   formation:        [number, number, number, number, number, string, string?];
   stat_health:      [number, number];
@@ -97,6 +98,7 @@ const sortedKeys = [
   "soldier",
   "mount",
   "mount_effect",
+  "engine",
   "attributes",
   "formation",
   "stat_health",

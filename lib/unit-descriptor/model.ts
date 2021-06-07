@@ -156,8 +156,8 @@ export const toString = (model: UnitDescriptor) =>
     if (values instanceof Array) {
       if (is2DArray<string | number | undefined>(values)) {
         const mapped = values.map((values) => `${key.padEnd(17)}${values.join(", ")}`);
-        return `${output}${mapped.join("\n")}\n`; // key with multiple records (see `ethnicity`)
-      } else return `${output}${key.padEnd(17)}${values.join(", ")}\n`; // generic case
-    } else if (values) return `${output}${key}\n`; // boolean flag - only add the key
+        return `${output}${mapped.join("\r\n")}\r\n`; // key with multiple records (see `ethnicity`)
+      } else return `${output}${key.padEnd(17)}${values.join(", ")}\r\n`; // generic case
+    } else if (values) return `${output}${key}\r\n`; // boolean flag - only add the key
     else return output; // value is undefined - key not present
   }, "");

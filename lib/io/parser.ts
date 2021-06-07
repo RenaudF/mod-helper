@@ -13,9 +13,8 @@ export const parse = (data: string) => dataParser(data).map(modelFactory).filter
  * The serialiser will simply attempt to serialise and concatenate the input `models`.
  * No validation is attempted on writeout so you will not be guaranteed a valid output
  * if you modify the values outside of the type system, in a debugger session for example.
- * @todo windows line endings
  * @todo validation */
-export const serialise = (models: UnitDescriptor[]) => models.map(toString).join("\n\n");
+export const serialise = (models: UnitDescriptor[]) => models.map(toString).join("\r\n\r\n");
 
 // Private API
 

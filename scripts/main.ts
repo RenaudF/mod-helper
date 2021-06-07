@@ -5,9 +5,13 @@ import { defenceBoostPatch, femaleFixPatch, moralBoostPatch } from "./patches";
 try {
   const data = fs.readFileSync(descriptors.unit.backup, "utf8");
   const models = parse(data);
+  // ----------------------------------//
+  //       Do what you want below      //
+  // --------------------------------- //
   femaleFixPatch(models);
   moralBoostPatch(models);
   defenceBoostPatch(models);
+  // --------------------------------- //
   const serialised = serialise(models);
   fs.writeFileSync(descriptors.unit.active, serialised);
 } catch (err) {

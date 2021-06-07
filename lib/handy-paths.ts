@@ -4,7 +4,6 @@ export const RTW_ROOT = <const>`${STEAM_HOME}/steamapps/common/Total War ROME RE
 export const descriptors = <const>{
   unit: {
     active: `${RTW_ROOT}/data/feral_export_descr_unit.txt`,
-    test: `${RTW_ROOT}/data/feral_export_descr_unit.txt.test`,
     backup: `${RTW_ROOT}/data/feral_export_descr_unit.txt.bak`,
   },
   strat: `${RTW_ROOT}/data/world/maps/campaign/imperial_campaign/descr_strat.txt`,

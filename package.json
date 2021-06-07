@@ -1,7 +1,8 @@
 {
   "scripts": {
-    "build": "tsc",
-    "start": "node bin/index.js"
+    "start": "ts-node scripts/main.ts",
+    "backup": "ts-node scripts/backup.ts",
+    "reset": "ts-node scripts/reset.ts"
   },
   "devDependencies": {
     "@types/node": "^15.6.1",

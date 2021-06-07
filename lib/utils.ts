@@ -18,3 +18,5 @@ export const isEmpty: {
 } = ({ length }) => !length;
 
 export const identity = <T>(d: T) => d;
+
+export type Multi<T> = T | T[];

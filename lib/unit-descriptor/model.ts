@@ -1,4 +1,4 @@
-import { is2DArray } from "lib/utils";
+import { is2DArray, Multi } from "lib/utils";
 
 /** Namespace to document union types of known possible values for their eponymous keys.
  * This namespace doubles up as an interface to model all possible known entries from the EDU.
@@ -79,10 +79,10 @@ export interface UnitDescriptor extends Record<string, EDUSanitisedData> {
   stat_food:        [number, number];
   stat_cost:        [number, number, number, number, number, number];
   ownership:        [string, ...string[]];
-  ethnicity?:       ([string, string?] |
+  ethnicity?:       Multi<([string, string?] |
                     [string, string, string?] |
                     [string, string, string, string?] |
-                    [string, string, string, string, string?])[];
+                    [string, string, string, string, string?])>;
   tattoo_color?:    [string];
   unique_tattoo?:   [number];
   exclude_tattoo?:  [string];

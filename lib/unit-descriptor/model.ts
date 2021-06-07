@@ -87,6 +87,8 @@ export interface UnitDescriptor extends Record<string, EDUSanitisedData> {
   tattoo_color?:    [string];
   unique_tattoo?:   [number];
   exclude_tattoo?:  [string];
+  hair_color?:      [string];
+  hair_style?:      [number];
   is_female?:       true;
 }
 
@@ -125,6 +127,8 @@ const sortedKeys = [
   "tattoo_color",
   "unique_tattoo",
   "exclude_tattoo",
+  "hair_color",
+  "hair_style",
   "is_female",
 ];
 

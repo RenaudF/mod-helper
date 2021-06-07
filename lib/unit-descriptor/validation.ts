@@ -29,6 +29,7 @@ const checklist: CheckItem[] = [
   { key: "voice_type", required: ["string"], optional: ["string"] },
   { key: "voice_indexes", isOptional: true, required: ["string"] },
   { key: "soldier", required: ["string", "number", "number", "number"] },
+  { key: "officer", isOptional: true, required: ["string"] },
   { key: "mount", isOptional: true, required: ["string"] },
   { key: "mount_effect", isOptional: true, required: ["string", "string"], optional: ["string"] },
   { key: "engine", isOptional: true, required: ["string"] },

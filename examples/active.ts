@@ -1,13 +1,13 @@
 import fs from "fs";
 import { descriptors, parse, serialise } from "lib";
+import { defenceBoostPatch, femaleFixPatch, moralBoostPatch } from "./patches";
 
 try {
-  const data = fs.readFileSync(descriptors.unit.active, "utf8");
+  const data = fs.readFileSync(descriptors.unit.backup, "utf8");
   const models = parse(data);
-  // fix missing is_female tags on some female units
-  models
-    .filter(({ type: [_type] }) => _type.includes("female"))
-    .forEach((model) => (model.is_female = true));
+  femaleFixPatch(models);
+  moralBoostPatch(models);
+  defenceBoostPatch(models);
   const serialised = serialise(models);
   fs.writeFileSync(descriptors.unit.active, serialised);
 } catch (err) {

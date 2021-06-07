@@ -60,9 +60,11 @@ export interface UnitDescriptor extends Record<string, EDUSanitisedData> {
   /** [ID from `descr_models_battle`, unit size, extras (dogs, chariots, etc), mass (1.0 standard - infantry only)] */
   soldier:          [string, number, number, number];
   officer?:         Multi<[string]>;
+  animal?:          [string];
   mount:            [string];
   mount_effect:     [string, string, string?];
   engine?:          [string];
+  ship?:            [string];
   attributes:       UnitDescriptor.Attributes[];
   formation:        [number, number, number, number, number, string, string?];
   stat_health:      [number, number];
@@ -103,9 +105,11 @@ const sortedKeys = [
   "voice_indexes",
   "soldier",
   "officer",
+  "animal",
   "mount",
   "mount_effect",
   "engine",
+  "ship",
   "attributes",
   "formation",
   "stat_health",
